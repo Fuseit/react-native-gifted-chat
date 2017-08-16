@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {
   Text,
@@ -5,6 +6,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   View,
+  ViewPropTypes,
 } from 'react-native';
 
 import MessageText from './MessageText';
@@ -63,11 +65,11 @@ export default class Bubble extends React.Component {
     if (currentMessage.user._id !== this.props.user._id) {
         return;
     }
-    if (currentMessage.sent || currentMessage.received) {
+    if (currentMessage.attributes.sent || currentMessage.attributes.received) {
       return (
         <View style={styles.tickView}>
-          {currentMessage.sent && <Text style={[styles.tick, this.props.tickStyle]}>✓</Text>}
-          {currentMessage.received && <Text style={[styles.tick, this.props.tickStyle]}>✓</Text>}
+          {currentMessage.attributes.sent && <Text style={[styles.tick, this.props.tickStyle]}>✓</Text>}
+          {currentMessage.attributes.received && <Text style={[styles.tick, this.props.tickStyle]}>✓</Text>}
         </View>
       )
     }
@@ -119,8 +121,10 @@ export default class Bubble extends React.Component {
   render() {
     return (
       <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
-        <View style={[styles[this.props.position].wrapper, this.props.wrapperStyle[this.props.position], this.handleBubbleToNext(), this.handleBubbleToPrevious()]}>
+        <View style={{marginRight: -50}}>
           {this.renderCustomView()}
+        </View>
+        <View style={[styles[this.props.position].wrapper, this.props.wrapperStyle[this.props.position], this.handleBubbleToNext(), this.handleBubbleToPrevious()]}>
           <TouchableWithoutFeedback
             onLongPress={this.onLongPress}
             accessibilityTraits="text"
@@ -131,7 +135,6 @@ export default class Bubble extends React.Component {
               {this.renderMessageText()}
               <View style={[styles.bottom, this.props.bottomContainerStyle[this.props.position]]}>
                 {this.renderTime()}
-                {this.renderTicks()}
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -145,7 +148,7 @@ const styles = {
   left: StyleSheet.create({
     container: {
       flex: 1,
-      alignItems: 'flex-start',
+      alignItems: 'flex-start'
     },
     wrapper: {
       borderRadius: 15,
@@ -165,13 +168,16 @@ const styles = {
     container: {
       flex: 1,
       alignItems: 'flex-end',
+      flexDirection: 'row',
+      alignSelf: 'flex-end',
+      justifyContent: 'flex-end'
     },
     wrapper: {
       borderRadius: 15,
       backgroundColor: '#0084ff',
       marginLeft: 60,
       minHeight: 20,
-      justifyContent: 'flex-end',
+      justifyContent: 'flex-end'
     },
     containerToNext: {
       borderBottomRightRadius: 3,
@@ -196,7 +202,7 @@ const styles = {
 };
 
 Bubble.contextTypes = {
-  actionSheet: React.PropTypes.func,
+  actionSheet: PropTypes.func,
 };
 
 Bubble.defaultProps = {
@@ -226,38 +232,38 @@ Bubble.defaultProps = {
 };
 
 Bubble.propTypes = {
-  touchableProps: React.PropTypes.object,
-  onLongPress: React.PropTypes.func,
-  renderMessageImage: React.PropTypes.func,
-  renderMessageText: React.PropTypes.func,
-  renderCustomView: React.PropTypes.func,
-  renderTime: React.PropTypes.func,
-  position: React.PropTypes.oneOf(['left', 'right']),
-  currentMessage: React.PropTypes.object,
-  nextMessage: React.PropTypes.object,
-  previousMessage: React.PropTypes.object,
-  containerStyle: React.PropTypes.shape({
+  touchableProps: PropTypes.object,
+  onLongPress: PropTypes.func,
+  renderMessageImage: PropTypes.func,
+  renderMessageText: PropTypes.func,
+  renderCustomView: PropTypes.func,
+  renderTime: PropTypes.func,
+  position: PropTypes.oneOf(['left', 'right']),
+  currentMessage: PropTypes.object,
+  nextMessage: PropTypes.object,
+  previousMessage: PropTypes.object,
+  containerStyle: PropTypes.shape({
     left: View.propTypes.style,
     right: View.propTypes.style,
   }),
-  wrapperStyle: React.PropTypes.shape({
+  wrapperStyle: PropTypes.shape({
     left: View.propTypes.style,
     right: View.propTypes.style,
   }),
-  bottomContainerStyle: React.PropTypes.shape({
+  bottomContainerStyle: PropTypes.shape({
     left: View.propTypes.style,
     right: View.propTypes.style,
   }),
   tickStyle: Text.propTypes.style,
-  containerToNextStyle: React.PropTypes.shape({
+  containerToNextStyle: PropTypes.shape({
     left: View.propTypes.style,
     right: View.propTypes.style,
   }),
-  containerToPreviousStyle: React.PropTypes.shape({
+  containerToPreviousStyle: PropTypes.shape({
     left: View.propTypes.style,
     right: View.propTypes.style,
   }),
   //TODO: remove in next major release
-  isSameDay: React.PropTypes.func,
-  isSameUser: React.PropTypes.func,
+  isSameDay: PropTypes.func,
+  isSameUser: PropTypes.func,
 };
