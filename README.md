@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repo is not in use and has been deprecated. It will eventually be deleted.
+
 # Gifted Chat
 The most complete chat UI for React Native (formerly known as Gifted Messenger)
 
